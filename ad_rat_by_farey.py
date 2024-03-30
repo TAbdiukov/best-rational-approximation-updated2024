@@ -102,6 +102,11 @@ def find_best_rat(l, t):
     # convert the solution to a rat for t
     n += t_int * d
     err = (t - float2(n) / d)
+    
+    # assert precision wasn't lost
+    assert(type(err) == type(float2(pi)))
+
+    # return data
     return err, n, d, niter
 
 # this function takes in an error bound err_in, an int limit l, and
