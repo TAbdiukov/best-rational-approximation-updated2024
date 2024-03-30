@@ -13,6 +13,7 @@
 # naming convention: n=numerator, d=denominator, l=left, r=right
 
 # author: ali dasdan
+# updated 2024 onwards by Tim Abdiukov.
 
 import sys
 import getopt
