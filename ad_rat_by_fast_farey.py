@@ -19,11 +19,11 @@ import getopt
 from math import *
 
 def show_usage():
-    print sys.argv[0] + " -h/--help [-e/--error=float>=0] -l/--limit=int>1 -t/--target=float or quoted math expr returning float"
+    print(sys.argv[0] + " -h/--help [-e/--error=float>=0] -l/--limit=int>1 -t/--target=float or quoted math expr returning float")
 
 def at_exit(msg):
     if msg != "" and msg != None:
-        print "Error:", msg
+        print("Error:", msg)
     show_usage()
     sys.exit(0)
 
@@ -146,7 +146,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:],
                                    'he:l:t:',
                                    ['help', 'error=', 'limit=', 'target='])
-    except getopt.GetoptError, msg:
+    except getopt.GetoptError as msg:
         at_exit(msg)
 
     for o, a in opts:
@@ -162,12 +162,12 @@ def main():
             elif o in ('-t', '--target'):
                 try:
                     t = float(eval(a))
-                except Exception, msg:
+                except Exception as msg:
                     at_exit(msg)
                 if t <= 0: raise Exception()
             else:
                 raise Exception()
-        except Exception, msg:
+        except Exception as msg:
             at_exit(msg)
 
     if t == None or l==None:
