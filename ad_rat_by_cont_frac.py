@@ -20,12 +20,27 @@ import sys
 import getopt
 from math import *
 
+USE_NUMPY_HI_PRECISION = True
+if(USE_NUMPY_HI_PRECISION):
+    try:
+        import numpy as np
+        float2 = lambda x: np.longdouble(x)
+    except ModuleNotFoundError:
+        print("Please disable USE_NUMPY_HI_PRECISION or install prerequisite,")
+        print("```")
+        print("pip install numpy")
+        print("```")
+        exit()
+else:
+    print("WARN: High precision NumPy logic is not used")
+    float2 = lambda x: float(x)
+
 def show_usage():
-    print sys.argv[0] + " -h/--help [-e/--error=float>=0] -l/--limit=int>1 -t/--target=float or quoted math expr returning float"
+    print(sys.argv[0] + " -h/--help [-e/--error=float>=0] -l/--limit=int>1 -t/--target=float or quoted math expr returning float")
 
 def at_exit(msg):
     if msg != "" and msg != None:
-        print "Error:", msg
+        print("Error:", msg)
     show_usage()
     sys.exit(0)
 
@@ -61,8 +76,8 @@ def find_best_rat(l, t):
         tmp = m10 * ai + m11
         m11 = m10
         m10 = tmp
-        if (x == float(ai)): break
-        x = float(1.0) / (x - float(ai))
+        if (x == float2(ai)): break
+        x = float2(1.0) / (x - float2(ai))
         ai = int(x)
 
     # now remaining x is between 0 and 1/ai. approx as either o or 1/m
@@ -71,18 +86,22 @@ def find_best_rat(l, t):
     # first try zero
     n1 = m00
     d1 = m10
-    err1 = (t - float(n1) / d1)
+    err1 = (t - float2(n1) / d1)
 
     # try the other possibility
-    ai = int(float(l - m11) / m10)
+    ai = int(float2(l - m11) / m10)
     n2 = m00 * ai + m01
     d2 = m10 * ai + m11
-    err2 = (t - float(n2) / d2)
+    err2 = (t - float2(n2) / d2)
 
-    if abs(err1) <= abs(err2):
-        return err1, n1, d1, niter
-    else:
-        return err2, n2, d2, niter
+    # optimization
+    best_err = min(abs(err1), abs(err2))
+
+    # assert precision wasn't lost
+    assert(type(best_err) == type(float2(pi)))
+
+    # return data
+    return best_err, n2, d2, niter
 
 # this function takes in an error bound err_in, an int limit l, and
 # the target fraction to approximate t and returns err_out, n, d,
@@ -110,7 +129,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:],
                                    'he:l:t:',
                                    ['help', 'error=', 'limit=', 'target='])
-    except getopt.GetoptError, msg:
+    except getopt.GetoptError as msg:
         at_exit(msg)
 
     for o, a in opts:
@@ -118,20 +137,20 @@ def main():
             if o in ('-h', '--help'):
                 raise Exception()
             elif o in ('-e', '--error'):
-                eps = float(a)
+                eps = float2(a)
                 if eps <= 0: raise Exception()
             elif o in ('-l', '--limit'):
                 l = int(a)
                 if l < 1: raise Exception()
             elif o in ('-t', '--target'):
                 try:
-                    t = float(eval(a))
-                except Exception, msg:
+                    t = float2(eval(a))
+                except Exception as msg:
                     at_exit(msg)
                 if t <= 0: raise Exception()
             else:
                 raise Exception()
-        except Exception, msg:
+        except Exception as msg:
             at_exit(msg)
 
     if t == None or l==None:
@@ -147,7 +166,7 @@ def main():
     if eps == None:
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g niter= %d" % (t, n, d, l, err, abs(err), niter))
     else:
-        print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float(abs(err)) / eps, niter))
+        print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float2(abs(err)) / eps, niter))
    
 if __name__ == '__main__':
     main()
