@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # find the best rational approximation n/d where d <= l to the given
 # target number t. here the best means the one with the smallest
@@ -13,17 +13,33 @@
 # naming convention: n=numerator, d=denominator, l=left, r=right
 
 # author: ali dasdan
+# updated 2024 onwards by Tim Abdiukov.
 
 import sys
 import getopt
 from math import *
 
+USE_NUMPY_HI_PRECISION = True
+if(USE_NUMPY_HI_PRECISION):
+    try:
+        import numpy as np
+        float2 = lambda x: np.longdouble(x)
+    except ModuleNotFoundError:
+        print("Please disable USE_NUMPY_HI_PRECISION or install prerequisite,")
+        print("```")
+        print("pip install numpy")
+        print("```")
+        exit()
+else:
+    print("WARN: High precision NumPy logic is not used")
+    float2 = lambda x: float(x)
+
 def show_usage():
-    print sys.argv[0] + " -h/--help [-e/--error=float>=0] -l/--limit=int>1 -t/--target=float or quoted math expr returning float"
+    print(sys.argv[0] + " -h/--help [-e/--error=float>=0] -l/--limit=int>1 -t/--target=float or quoted math expr returning float")
 
 def at_exit(msg):
     if msg != "" and msg != None:
-        print "Error:", msg
+        print("Error:", msg)
     show_usage()
     sys.exit(0)
 
@@ -61,8 +77,8 @@ def find_best_rat(l, t):
         # also find the largest bl such that x < (bl * nl + nr) / (bl * dl + dr).
         ntmp = nl - t_frac * dl
         dtmp = t_frac * dr - nr
-        br = int(floor(float(ntmp) / dtmp))
-        bl = int(floor(float(dtmp) / ntmp))
+        br = int(floor(float2(ntmp) / dtmp))
+        bl = int(floor(float2(dtmp) / ntmp))
         side = 0 # left:-1, init:0, right:1
         if bl == 0: 
             bl = 1
@@ -80,15 +96,15 @@ def find_best_rat(l, t):
 
         if dm > l:
             if side == -1:
-                br = max(1, int(floor(float(l - dl) / dr)))
+                br = max(1, int(floor(float2(l - dl) / dr)))
             elif side == 1:
-                bl = max(1, int(floor(float(l - dr) / dl)))
+                bl = max(1, int(floor(float2(l - dr) / dl)))
 
         # recalculate nm, dm, and med after the jump
         nm = nl * bl + nr * br
         dm = dl * bl + dr * br
         if dm > l: break
-        med = float(nm) / dm
+        med = float2(nm) / dm
 
         # branch based on t's position in nl/dr < med < nr/dr
         if t_frac == med:
@@ -108,8 +124,8 @@ def find_best_rat(l, t):
         n, d = nm, dm
     else: 
         # find out the endpoint closest to t_frac
-        errl = abs(t_frac - float(nl) / dl)
-        errr = abs(t_frac - float(nr) / dr)
+        errl = abs(t_frac - float2(nl) / dl)
+        errr = abs(t_frac - float2(nr) / dr)
         if errl <= errr:
             n, d = nl, dl
         else:
@@ -117,7 +133,12 @@ def find_best_rat(l, t):
 
     # convert the solution to a rat for t
     n += t_int * d
-    err = (t - float(n) / d)
+    err = (t - float2(n) / d)
+
+    # assert precision wasn't lost
+    assert(type(err) == type(float2(pi)))
+
+    # return data
     return err, n, d, niter
 
 # this function takes in an error bound err_in, an int limit l, and
@@ -146,7 +167,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:],
                                    'he:l:t:',
                                    ['help', 'error=', 'limit=', 'target='])
-    except getopt.GetoptError, msg:
+    except getopt.GetoptError as msg:
         at_exit(msg)
 
     for o, a in opts:
@@ -154,20 +175,20 @@ def main():
             if o in ('-h', '--help'):
                 raise Exception()
             elif o in ('-e', '--error'):
-                eps = float(a)
+                eps = float2(a)
                 if eps <= 0: raise Exception()
             elif o in ('-l', '--limit'):
                 l = int(a)
                 if l < 1: raise Exception()
             elif o in ('-t', '--target'):
                 try:
-                    t = float(eval(a))
-                except Exception, msg:
+                    t = float2(eval(a))
+                except Exception as msg:
                     at_exit(msg)
                 if t <= 0: raise Exception()
             else:
                 raise Exception()
-        except Exception, msg:
+        except Exception as msg:
             at_exit(msg)
 
     if t == None or l==None:
@@ -183,7 +204,7 @@ def main():
     if eps == None:
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g niter= %d" % (t, n, d, l, err, abs(err), niter))
     else:
-        print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float(abs(err)) / eps, niter))
+        print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float2(abs(err)) / eps, niter))
 
 if __name__ == '__main__':
     main()
