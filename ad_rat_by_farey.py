@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # find the best rational approximation n/d where d <= l to the given
 # target number t. here the best means the one with the smallest
