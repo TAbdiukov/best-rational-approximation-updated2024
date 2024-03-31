@@ -7,6 +7,7 @@
 # rational numbers.
 
 # author: ali dasdan
+# updated 2024 onwards by Tim Abdiukov.
 
 import sys
 import getopt
@@ -14,12 +15,27 @@ import re
 from math import *
 from ad_rat_by_fast_farey import *
 
+USE_NUMPY_HI_PRECISION = True
+if(USE_NUMPY_HI_PRECISION):
+    try:
+        import numpy as np
+        float2 = lambda x: np.longdouble(x)
+    except ModuleNotFoundError:
+        print("Please disable USE_NUMPY_HI_PRECISION or install prerequisite,")
+        print("```")
+        print("pip install numpy")
+        print("```")
+        exit()
+else:
+    print("WARN: High precision NumPy logic is not used")
+    float2 = lambda x: float(x)
+
 def show_usage():
-    print "Usage:  " + sys.argv[0] + " -l/--limit=int>=1 -n/--nums=quoted list of at least 2 numbers or math expression returning float (w/o spaces)"
+    print("Usage:  " + sys.argv[0] + " -l/--limit=int>=1 -n/--nums=quoted list of at least 2 numbers or math expression returning float (w/o spaces)")
 
 def at_exit(msg):
     if msg != '' and msg != None:
-        print "Error:", msg
+        print("Error:", msg)
     show_usage()
     sys.exit(0)
 
@@ -84,7 +100,7 @@ def main():
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'l:n:', ['limit=', 'nums'])
-    except getopt.GetoptError, msg:
+    except getopt.GetoptError as msg:
         at_exit(msg)
 
     for o, a in opts:
@@ -96,7 +112,7 @@ def main():
                 if l < 1: raise Exception()
             else:
                 raise Exception()
-        except Exception, msg:
+        except Exception as msg:
             at_exit(msg)
 
     if s == None:
@@ -104,7 +120,7 @@ def main():
 
     # get the list from the input string
     lst = re.split("[\s,;|:]+", s)
-    print "input:", lst
+    print("input:", lst)
     if len(lst) <= 1 or l == None:
         at_exit("Bad args")
     
@@ -113,10 +129,10 @@ def main():
     for x in lst:
         try:
             nums.append(eval(x))
-        except Exception, msg:
+        except Exception as msg:
             at_exit(msg)
 
-    print "input evaluated:", nums
+    print("input evaluated:", nums)
 
     # convert to best rational approximations
     ns = []
@@ -130,17 +146,17 @@ def main():
     for n, d in zip(ns, ds):
         rats.append(str(n) + "/" + str(d))
     srats = ", ".join(rats)
-    print "best_rats= [" + srats + "]"
+    print("best_rats= [" + srats + "]")
 
     # compute gcd and lcm of the elts in the list
     n_gcd, d_gcd = rgcd_lst(ns, ds)
     n_lcm, d_lcm = rlcm_lst(ns, ds)
     
-    gcd = float(n_gcd) / d_gcd
-    lcm = float(n_lcm) / d_lcm
+    gcd = float2(n_gcd) / d_gcd
+    lcm = float2(n_lcm) / d_lcm
 
     print("gcd: rat= %d / %d val= %g" % (n_gcd, d_gcd, gcd))    
-    print("lcm: rat= %d / %d val= %g lcm/gcd= %g" % (n_lcm, d_lcm, lcm, float(lcm)/gcd))
+    print("lcm: rat= %d / %d val= %g lcm/gcd= %g" % (n_lcm, d_lcm, lcm, float2(lcm)/gcd))
 
     # compute the ratios and measure error (difference from the
     # closest int)
@@ -150,21 +166,21 @@ def main():
     n_div_gcd = []
     lcm_div_n = []
     for x in nums:
-        r = float(x) / gcd
+        r = float2(x) / gcd
         r_int = int(round(r))
         err = abs(r - r_int)
         if err > max_err_gcd:
             max_err_gcd = err
         n_div_gcd.append(r_int)
-        r = float(lcm) / x
+        r = float2(lcm) / x
         r_int = int(round(r))
         err = abs(r - r_int)
         if err > max_err_lcm:
             max_err_lcm = err
         lcm_div_n.append(r_int)
 
-    print "nums_div_gcd= ", n_div_gcd, "max_err= %g" % (max_err_gcd)
-    print "lcm_div_nums= ", lcm_div_n, "max_err= %g" % (max_err_lcm)
+    print("nums_div_gcd= ", n_div_gcd, "max_err= %g" % (max_err_gcd))
+    print("lcm_div_nums= ", lcm_div_n, "max_err= %g" % (max_err_lcm))
     
 if __name__ == "__main__":
     main()

@@ -27,7 +27,7 @@ if(USE_NUMPY_HI_PRECISION):
     except ModuleNotFoundError:
         print("Please disable USE_NUMPY_HI_PRECISION or install prerequisite,")
         print("```")
-        print("pip install pyperclip")
+        print("pip install numpy")
         print("```")
         exit()
 else:
