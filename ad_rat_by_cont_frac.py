@@ -15,6 +15,7 @@
 # just keep the last partial product of these matrics.
 
 # author: ali dasdan (based on the C code by d. eppstein)
+# updated 2024 onwards by Tim Abdiukov.
 
 import sys
 import getopt
