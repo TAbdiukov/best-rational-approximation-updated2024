@@ -5,6 +5,13 @@ This package contains algorithms to find the best rational
 approximation to a given floating-point number and to find the gcd and
 lcm of a given list of floating-point numbers.
 
+## 2024 Update - Changes
+
+* Code converted to Python3
+* Usage of NumPy high precision floats for calculations (recommended, can be disabled)
+* Small sanity checks and QoL changes
+
+
 ## BEST RATIONAL APPROXIMATION PROBLEM
 
 A fraction n/d, where d is at most a given limit l, is the best
