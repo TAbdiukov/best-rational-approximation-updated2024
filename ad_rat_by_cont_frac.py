@@ -60,7 +60,7 @@ def find_best_rat(l, t):
     # initialize the matrix
     m00, m01 = 1, 0
     m10, m11 = 0, 1
-    
+
     # loop finding terms until denom gets too big
     x = t
     ai = int(x)
@@ -83,7 +83,7 @@ def find_best_rat(l, t):
 
     # now remaining x is between 0 and 1/ai. approx as either o or 1/m
     # where m is max that will fit in l.
-    
+
     # first try zero
     n1 = m00
     d1 = m10
@@ -168,7 +168,7 @@ def main():
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g niter= %d" % (t, n, d, l, err, abs(err), niter))
     else:
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float2(abs(err)) / eps, niter))
-   
+
 if __name__ == '__main__':
     main()
 

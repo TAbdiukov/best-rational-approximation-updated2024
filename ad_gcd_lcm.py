@@ -123,7 +123,7 @@ def main():
     print("input:", lst)
     if len(lst) <= 1 or l == None:
         at_exit("Bad args")
-    
+
     # convert each elt of the list to a float string
     nums = []
     for x in lst:
@@ -151,11 +151,11 @@ def main():
     # compute gcd and lcm of the elts in the list
     n_gcd, d_gcd = rgcd_lst(ns, ds)
     n_lcm, d_lcm = rlcm_lst(ns, ds)
-    
+
     gcd = float2(n_gcd) / d_gcd
     lcm = float2(n_lcm) / d_lcm
 
-    print("gcd: rat= %d / %d val= %g" % (n_gcd, d_gcd, gcd))    
+    print("gcd: rat= %d / %d val= %g" % (n_gcd, d_gcd, gcd))
     print("lcm: rat= %d / %d val= %g lcm/gcd= %g" % (n_lcm, d_lcm, lcm, float2(lcm)/gcd))
 
     # compute the ratios and measure error (difference from the
@@ -181,7 +181,7 @@ def main():
 
     print("nums_div_gcd= ", n_div_gcd, "max_err= %g" % (max_err_gcd))
     print("lcm_div_nums= ", lcm_div_n, "max_err= %g" % (max_err_lcm))
-    
+
 if __name__ == "__main__":
     main()
 

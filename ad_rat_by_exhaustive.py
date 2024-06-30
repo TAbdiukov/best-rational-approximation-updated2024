@@ -6,7 +6,7 @@
 
 # this code uses the exhaustive search for each potential denominator
 # up to and including l.
- 
+
 # author: ali dasdan
 # updated 2024 onwards by Tim Abdiukov.
 
@@ -61,13 +61,13 @@ def find_best_rat(l, t):
             if err < best_err:
                 best_err = err
                 best_n, best_d = n, d
-    
+
     # assert precision wasn't lost
     assert(type(best_err) == type(float2(pi)))
 
     # return data
     return best_err, best_n, best_d, niter
-        
+
 # this function takes in an error bound err_in, an int limit l, and
 # the target fraction to approximate t and returns err_out, n, d,
 # niter where n/d is the approximate rational for t with d<=l, err_out
@@ -134,7 +134,7 @@ def main():
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g niter= %d" % (t, n, d, l, err, abs(err), niter))
     else:
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float2(abs(err)) / eps, niter))
-    
+
 if __name__ == '__main__':
     main()
 

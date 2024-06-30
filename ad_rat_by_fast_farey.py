@@ -2,7 +2,7 @@
 
 # find the best rational approximation n/d where d <= l to the given
 # target number t. here the best means the one with the smallest
-# absolute error between t and n/d. 
+# absolute error between t and n/d.
 
 # this code uses "the binary search" (where the "mid point" is the
 # mediant, over the farey sequence but with a speedup technique to
@@ -80,10 +80,10 @@ def find_best_rat(l, t):
         br = int(floor(float2(ntmp) / dtmp))
         bl = int(floor(float2(dtmp) / ntmp))
         side = 0 # left:-1, init:0, right:1
-        if bl == 0: 
+        if bl == 0:
             bl = 1
             side = -1
-        if br == 0: 
+        if br == 0:
             br = 1
             side = 1
         dm = dl * bl + dr * br
@@ -118,11 +118,11 @@ def find_best_rat(l, t):
             nl, dl = nm, dm
 
     ### end the processing for t_frac ###
-    
-    if loc == 0: 
+
+    if loc == 0:
         # t_frac = med
         n, d = nm, dm
-    else: 
+    else:
         # find out the endpoint closest to t_frac
         errl = abs(t_frac - float2(nl) / dl)
         errr = abs(t_frac - float2(nr) / dr)
@@ -156,7 +156,7 @@ def find_best_rat_with_err_bound(err_in, l, t):
         sum_niter += niter
         err_out, n, d, niter = find_best_rat(l_curr, t)
     return err_out, n, d, sum_niter
-        
+
 def main():
     eps = None
     l = None

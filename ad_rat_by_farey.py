@@ -8,7 +8,7 @@
 # mediant, over the farey sequence. note that the mediant of two
 # fractions a/b and c/d (where a/b < c/d) is (a+c)/(b+d), which is
 # guaranteed to lie between a/b and c/d.
- 
+
 # naming convention: n=numerator, d=denominator, l=left, r=right
 
 # author: ali dasdan
@@ -86,11 +86,11 @@ def find_best_rat(l, t):
             nl, dl = nm, dm
 
     ### end the processing for t_frac ###
-    
-    if loc == 0: 
+
+    if loc == 0:
         # t_frac = med
         n, d = nm, dm
-    else: 
+    else:
         # find out the endpoint closest to t_frac
         errl = abs(t_frac - float2(nl) / dl)
         errr = abs(t_frac - float2(nr) / dr)
@@ -102,7 +102,7 @@ def find_best_rat(l, t):
     # convert the solution to a rat for t
     n += t_int * d
     err = (t - float2(n) / d)
-    
+
     # assert precision wasn't lost
     assert(type(err) == type(float2(pi)))
 
@@ -173,7 +173,7 @@ def main():
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g niter= %d" % (t, n, d, l, err, abs(err), niter))
     else:
         print("target= %f best_rat= %d / %d max_denom= %d err= %g abs_err= %g abs_err/error= %g niter= %d" % (t, n, d, l, err, abs(err), float2(abs(err)) / eps, niter))
-    
+
 if __name__ == '__main__':
     main()
 
