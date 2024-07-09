@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf8 -*-
 
 # find the gcd and lcm of a given list of floating-point numbers. this
 # code uses a best rational approximation algorithm to solve the
